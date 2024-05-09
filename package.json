@@ -1,0 +1,17 @@
+{
+  "name": "fullstackopen_osa9",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bmiCalculator.ts",
+  "scripts": {
+    "ts-node": "ts-node",
+    "bmiCalculator": "ts-node bmiCalculator",
+    "exerciseCalculator": "ts-node exerciseCalculator"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.11"
+  }
+}
