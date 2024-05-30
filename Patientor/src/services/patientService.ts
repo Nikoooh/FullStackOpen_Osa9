@@ -1,5 +1,5 @@
-import patientData from "../../data/patientData";
-import { Patient, PatientEntry, PatientReturnData } from "../types";
+import patientData from "../data/patientData";
+import { Patient, NewPatientEntry, PatientReturnData, EntryWithoutId, Entry } from "../types";
 import { v1 as uuid } from 'uuid';
 
 const getPatients = (): PatientReturnData[] => {
@@ -12,10 +12,18 @@ const getPatients = (): PatientReturnData[] => {
   }));
 };
 
-const addPatient = (patient: PatientEntry): Patient => {
+const getPatient = (id: string): Patient | undefined => {
+
+  const patient = patientData.filter((patient) => patient.id === id);
+  return patient[0];
+
+};
+
+const addPatient = (patient: NewPatientEntry): Patient => {
   const newPatient: Patient = {
     id: uuid(),
-    ...patient
+    ...patient,
+    entries: []
   };
 
   patientData.push(newPatient);
@@ -23,7 +31,20 @@ const addPatient = (patient: PatientEntry): Patient => {
 
 };
 
+const addEntry = (patient: Patient, entry: EntryWithoutId): Entry => {
+  const newEntry: Entry = {
+    id: uuid(),
+    ...entry
+  };  
+
+  patient.entries.push(newEntry);
+  return newEntry;
+  
+};
+
 export default {
   getPatients,
-  addPatient
+  getPatient,
+  addPatient,
+  addEntry
 };
