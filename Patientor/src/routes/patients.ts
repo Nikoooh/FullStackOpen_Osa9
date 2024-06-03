@@ -55,6 +55,7 @@ patientRouter.post('/:id/entries', (req, res) => {
     if (!patient) {
       throw new Error('No patient found');
     }
+    
 
     const entry = toNewEntry(req.body);
     const newEntry = patientService.addEntry(patient, entry);

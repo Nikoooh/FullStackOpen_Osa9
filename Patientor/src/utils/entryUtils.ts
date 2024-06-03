@@ -56,7 +56,7 @@ const toNewEntry = (data: unknown): EntryWithoutId => {
             date: parseString(data.date),
             specialist: parseString(data.specialist),
             type: data.type,
-            dianosisCodes: parseDiagnosisCodes(data.diagnosisCodes),
+            diagnosisCodes: parseDiagnosisCodes(data.diagnosisCodes),
             discharge: parseDischarge(data.discharge)
           };
           return newEntry;

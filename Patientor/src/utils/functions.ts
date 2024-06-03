@@ -3,8 +3,8 @@ import { Diagnosis, Discharge, HealthCheckRating, SickLeave, Gender } from "../t
 // General
 
 export const parseString = (text: unknown): string => {
-  if (!text || !isString(text)) {
-    throw new Error('Type incorrect or missing');
+  if (!text || !isString(text) || text.length <= 1) {
+    throw new Error('Input incorrect or missing');
   }
   return text;
 };
@@ -31,22 +31,23 @@ export const parseGender = (gender: unknown): Gender => {
 
 // Entry types
 
-export const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =>  {
-  if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+export const parseDiagnosisCodes = (array: unknown): Array<Diagnosis['code']> =>  {
+  if (!array || typeof array !== 'object') {
     // we will just trust the data to be in correct form
     return [] as Array<Diagnosis['code']>;
   }
 
-  return object.diagnosisCodes as Array<Diagnosis['code']>;
+  return array as Array<Diagnosis['code']>;
 };
 
 const isHealthcheckRating = (value: unknown): value is HealthCheckRating => {
-  return typeof value === 'string' && Object.values(HealthCheckRating).includes(value);
+  return typeof value === 'number' && Object.values(HealthCheckRating).includes(value);
 };
 
 export const parseHealthCheckRating = (value: unknown): HealthCheckRating => {
-  if (!value || !isHealthcheckRating(value)) {
-    throw new Error('Unexpected health rating');
+  
+  if (value === undefined || !isHealthcheckRating(value)) {
+    throw new Error(`Unexpected health rating: ${value}`);
   }
 
   return value;
@@ -54,11 +55,11 @@ export const parseHealthCheckRating = (value: unknown): HealthCheckRating => {
 };
 
 const isSickLeave = (object: unknown): object is SickLeave => {
-  return typeof object === 'object' && object !== null && 'startDate' in object && 'endDate' in object && isString(object.startDate) && isString(object.endDate);
+  return typeof object === 'object' && object !== null && 'startDate' in object && 'endDate' in object;
 };
 
 export const parseSickLeave = (object: unknown): SickLeave => {
-  if (!isSickLeave(object)) {
+  if (!isSickLeave(object) || !parseString(object.startDate) || !parseString(object.endDate)) {
     throw new Error('Unexpected sick leave values');
   }
 
@@ -67,11 +68,11 @@ export const parseSickLeave = (object: unknown): SickLeave => {
 };
 
 const isDischarge = (object: unknown): object is Discharge => {
-  return typeof object === 'object' && object !== null && 'date' in object && 'criteria' in object && isString(object.date) && isString(object.criteria);
+  return typeof object === 'object' && object !== null && 'date' in object && 'criteria' in object;
 };
 
 export const parseDischarge = (object: unknown): Discharge => {
-  if (!isDischarge(object)) {
+  if (!isDischarge(object) || !parseString(object.date) || !parseString(object.criteria)) {
     throw new Error('Unexpected discharge values');
   }
 
